@@ -2,69 +2,54 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Steps to host this front end application with cognito authentication in AWS Ammplify
 
-In the project directory, you can run:
+Firstly you need to install the aws amplify cli globally...this cli allows us to interact with amplify and set basic features for the app
+npm install @aws-amplify/cli -g ( Installing amplify cli globally)
 
-### `yarn start`
+Once the amplify cli is installed successfully, you need to do 
+## amplify configure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This is to configure amplify ( This command launches the documentation we can refer)
+We can navigate to IAM and create a new user and attach the amplify administrator access policy to the user
+Then add the required access keys for the user we created and the region to be selected
+After these steps we can interact with amplify with our local IDE
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Once done, we need to initialize amplify in our React App saying
+## amplify init
+We need to name our project, set the default configuration,  authentication method (to be the profile we created earlier)
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Then we need to add authnetication for our app using cognito
 
-### `yarn build`
+## amplify add auth
+Go with a default config, use email for signing in.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then push these changes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## amplify push
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Then inside cognito, we would have a new user pool created for us...AWS works on the principal of user pools and set of users withing that can access the app.
 
-### `yarn eject`
+Right now, the user pool is empty...there are no users. we can create a user inside that user pool with an email id...this actually sends a verification code so be sure to give authentic email id
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The in our react app, we need the app to be wrapped with Amplify and make sure our created users can access this
+So, we need to install a couple of packages
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## npm install aws-amplify @aws-amplify/ui-react
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Then in out App.js, we wrap the base or parent coponent to be routed via amplify, essentially login directs us to there
+We use two imports
+## import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react'
+Authenticator gives us the actual UI that contains the login screen and withAuthenticator wraps around the highest order component that enforces authentication
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Test it out locally to see if the app works with cognito authentication.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Once done push the code to a remote github repository. We use this repo and hook up amplify to this repo host the front end via github so that any changtes to the repo will be automatically re-deployed.
+Hence the task, Continuous Integration/Continuous Deployment (CI/CD)
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+So now go to amplify -> Hosting Environments -> connect the github repo and the branch you want to use, choose the required backend and give/create a new role with policy Amplify administrator access that allows amplify to deploy.
+The click save and deploy which deploys the application and host the react app onto the cloud.

@@ -39,7 +39,7 @@ So, we need to install a couple of packages
 
 ## npm install aws-amplify @aws-amplify/ui-react
 
-Then in out App.js, we wrap the base or parent coponent to be routed via amplify, essentially login directs us to there
+Then in our App.js, we wrap the parent component to be routed via amplify, essentially login directs us to there
 We use two imports
 ## import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react'
 Authenticator gives us the actual UI that contains the login screen and withAuthenticator wraps around the highest order component that enforces authentication

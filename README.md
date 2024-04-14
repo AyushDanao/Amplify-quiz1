@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Steps to host this front end application with cognito authentication in AWS Ammplify
+## Steps to host this front end application with cognito authentication in AWS Amplify
 
 Firstly you need to install the aws amplify cli globally...this cli allows us to interact with amplify and set basic features for the app
 npm install @aws-amplify/cli -g ( Installing amplify cli globally)
